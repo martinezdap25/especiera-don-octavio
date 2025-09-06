@@ -2,6 +2,10 @@ import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common'
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 
+interface RequestWithUser extends Request {
+    user: { email: string; role: string };
+}
+
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
@@ -16,7 +20,10 @@ export class AuthController {
 
     @Get('profile')
     @UseGuards(AuthGuard)
-    profile(@Request() req) {
+    profile(
+        @Request()
+        req: RequestWithUser,
+    ) {
         return req.user;
     }
 }
