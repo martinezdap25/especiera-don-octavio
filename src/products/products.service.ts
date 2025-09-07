@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -14,7 +14,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
-  ) {}
+  ) { }
 
   async create(createProductDto: CreateProductDto) {
     try {
@@ -25,8 +25,27 @@ export class ProductsService {
     }
   }
 
-  async findAll() {
-    return this.productRepository.find();
+  async findAll(options: { page: number; limit: number; search?: string }) {
+    const { page, limit, search } = options;
+    const skip = (page - 1) * limit;
+
+    const where = search
+      ? { name: ILike(`%${search}%`) }
+      : {};
+
+    const [data, total] = await this.productRepository.findAndCount({
+      where,
+      skip,
+      take: limit,
+      order: { name: 'ASC' },
+    });
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: number) {

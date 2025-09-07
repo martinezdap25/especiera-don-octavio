@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsBoolean,
-  Min,
-} from "class-validator";
+import { IsString, IsEnum, IsNumber, Min } from "class-validator";
 import { UnitType } from '../entities/product.entity';
 
 export class CreateProductDto {
@@ -18,12 +11,4 @@ export class CreateProductDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   price: number;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isAvailable: boolean = true;
 }

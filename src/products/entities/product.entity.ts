@@ -1,9 +1,4 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum UnitType {
   GRAMS = "grams",
@@ -23,12 +18,6 @@ export class Product {
 
   @Column("decimal", { precision: 10, scale: 2 })
   price: number;
-
-  @Column({ nullable: true })
-  description: string;
-
-  @Column({ default: true })
-  isAvailable: boolean;
 
   @DeleteDateColumn()
   deletedAt: Date;
