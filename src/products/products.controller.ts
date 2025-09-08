@@ -17,12 +17,14 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { AuthGuard } from "src/auth/auth.guard";
+import { ApiBearerAuth } from "@nestjs/swagger";
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth()
   @Post()
   @UseGuards(AuthGuard)
   create(@Body() createProductDto: CreateProductDto) {
@@ -38,11 +40,14 @@ export class ProductsController {
     return this.productsService.findAll({ page, limit, search });
   }
 
+  @ApiBearerAuth()
   @Get(':id')
+  @UseGuards(AuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @Patch(':id')
   @UseGuards(AuthGuard)
   update(
@@ -53,6 +58,7 @@ export class ProductsController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AuthGuard)
   remove(@Param('id', ParseIntPipe) id: number) {
