@@ -25,27 +25,42 @@ export class ProductsService {
     }
   }
 
-  async findAll(options: { page: number; limit: number; search?: string; sortBy?: string; sortOrder?: 'ASC' | 'DESC' }) {
-    const { page, limit, search, sortBy, sortOrder } = options;
+  async findAll(options: {
+    page: number;
+    limit: number;
+    search?: string;
+    sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc';
+  }) {
+    const { page, limit, search, sort } = options;
     const skip = (page - 1) * limit;
 
-    const where = search
-      ? { name: ILike(`%${search}%`) }
-      : {};
+    const query = this.productRepository.createQueryBuilder('product');
 
-    const order: { [key: string]: 'ASC' | 'DESC' } = {};
-    if (sortBy) {
-      order[sortBy] = sortOrder || 'ASC';
-    } else {
-      order['name'] = 'ASC';
+    if (search) {
+      query.where('product.name ILIKE :search', { search: `%${search}%` });
     }
 
-    const [data, total] = await this.productRepository.findAndCount({
-      where,
-      skip,
-      take: limit,
-      order,
-    });
+    switch (sort) {
+      case 'price_asc':
+        query.orderBy('CAST(product.price AS DECIMAL)', 'ASC');
+        break;
+      case 'price_desc':
+        query.orderBy('CAST(product.price AS DECIMAL)', 'DESC');
+        break;
+      case 'name_asc':
+        query.orderBy('product.name', 'ASC');
+        break;
+      case 'name_desc':
+        query.orderBy('product.name', 'DESC');
+        break;
+      default:
+        query.orderBy('product.name', 'ASC');
+    }
+
+    const [data, total] = await query
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
 
     return {
       data,

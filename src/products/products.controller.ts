@@ -36,10 +36,9 @@ export class ProductsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
     @Query('search') search?: string,
-    @Query('sortBy') sortBy?: string, // Nuevo parámetro para ordenar por campo
-    @Query('sortOrder') sortOrder?: 'ASC' | 'DESC', // Nuevo parámetro para la dirección del ordenamiento
+    @Query('sort') sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc'
   ) {
-    return this.productsService.findAll({ page, limit, search, sortBy, sortOrder });
+    return this.productsService.findAll({ page, limit, search, sort });
   }
 
   @ApiBearerAuth()
