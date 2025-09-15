@@ -25,19 +25,26 @@ export class ProductsService {
     }
   }
 
-  async findAll(options: { page: number; limit: number; search?: string }) {
-    const { page, limit, search } = options;
+  async findAll(options: { page: number; limit: number; search?: string; sortBy?: string; sortOrder?: 'ASC' | 'DESC' }) {
+    const { page, limit, search, sortBy, sortOrder } = options;
     const skip = (page - 1) * limit;
 
     const where = search
       ? { name: ILike(`%${search}%`) }
       : {};
 
+    const order: { [key: string]: 'ASC' | 'DESC' } = {};
+    if (sortBy) {
+      order[sortBy] = sortOrder || 'ASC';
+    } else {
+      order['name'] = 'ASC';
+    }
+
     const [data, total] = await this.productRepository.findAndCount({
       where,
       skip,
       take: limit,
-      order: { name: 'ASC' },
+      order,
     });
 
     return {
