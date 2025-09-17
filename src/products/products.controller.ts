@@ -34,7 +34,7 @@ export class ProductsController {
   @Get()
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+    @Query('limit', new DefaultValuePipe(6), ParseIntPipe) limit: number,
     @Query('search') search?: string,
     @Query('sort') sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc'
   ) {
