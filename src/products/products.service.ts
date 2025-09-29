@@ -29,7 +29,7 @@ export class ProductsService {
     page: number;
     limit: number;
     search?: string;
-    sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc';
+    sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc' | 'createdAt_desc';
   }) {
     const { page, limit, search, sort } = options;
     const skip = (page - 1) * limit;
@@ -52,6 +52,9 @@ export class ProductsService {
         break;
       case 'name_desc':
         query.orderBy('product.name', 'DESC');
+        break;
+      case 'createdAt_desc':
+        query.orderBy('product.createdAt', 'DESC');
         break;
       default:
         query.orderBy('product.name', 'ASC');

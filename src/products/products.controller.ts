@@ -36,7 +36,13 @@ export class ProductsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(6), ParseIntPipe) limit: number,
     @Query('search') search?: string,
-    @Query('sort') sort?: 'price_asc' | 'price_desc' | 'name_asc' | 'name_desc'
+    @Query('sort')
+    sort?:
+      | 'price_asc'
+      | 'price_desc'
+      | 'name_asc'
+      | 'name_desc'
+      | 'createdAt_desc',
   ) {
     return this.productsService.findAll({ page, limit, search, sort });
   }
