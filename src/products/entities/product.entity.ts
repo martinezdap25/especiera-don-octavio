@@ -1,4 +1,10 @@
-import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 export enum UnitType {
   GRAMS = "grams",
@@ -18,6 +24,9 @@ export class Product {
 
   @Column("decimal", { precision: 10, scale: 2 })
   price: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

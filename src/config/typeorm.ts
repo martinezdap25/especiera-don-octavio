@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
+import * as path from 'path';
 import { URL } from 'url';
 
 const dbUrl = new URL(process.env.DATABASE_URL!);
@@ -13,8 +14,8 @@ export const AppDataSource = new DataSource({
   password: dbUrl.password,
   database: dbUrl.pathname.slice(1),
   synchronize: false,
-  logging: true,
+  logging: false, // Se recomienda desactivar el logging para la CLI para ver solo los mensajes importantes
   ssl: isSSL ? { rejectUnauthorized: false } : false,
-  entities: [`${__dirname}/**/*.entity{.ts,.js}`],
+  entities: [path.join(__dirname, '/../../**/*.entity{.ts,.js}')],
   migrations: [`${__dirname}/../db/migrations/*{.ts,.js}`],
 });
