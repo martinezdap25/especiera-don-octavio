@@ -13,7 +13,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000', // frontend local
-      'https://especiera-don-octavio-front.vercel.app', // ejemplo en prod (ajustá según tu deploy)
+      'https://especiera-don-octavio-front.vercel.app',
+      'https://especieradonoctavio.vercel.app'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
